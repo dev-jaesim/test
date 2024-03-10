@@ -1,0 +1,1430 @@
+openapi: 3.0.1
+x-stoplight:
+  id: b11kmwn9fgxwp
+info:
+  title: NSWPoint V3
+  description: NSWPoint V3 APIGateway
+  version: '2024-02-16T06:03:05Z'
+servers:
+  - url: 'https://b7shjizqqh.execute-api.ap-southeast-2.amazonaws.com/prod'
+tags:
+  - name: ADDRESS
+  - name: COORDINATE
+  - name: PROPERTY
+  - name: CADASTRAL PARCEL
+paths:
+  /reverseGeocoder:
+    get:
+      tags:
+        - COORDINATE
+      description: TEST AVAILABLE DUMMY TEXT
+      parameters:
+        - name: matchType
+          in: query
+          description: |
+            The accepted match type for the search.
+
+            **Acceptable values:**
+            * address
+            * streetLocality
+            * locality
+          schema:
+            type: string
+            default: address
+        - name: additionalProperties
+          description: |
+            The additionalProperties parameter will accept any combination of the documented values in a comma separated list. The following table includes the standard set of values that should made available.
+
+            **Acceptable values:**
+            * asgsMain
+            * commonwealthElectorate
+            * deliveryPoint
+            * localGovernmentArea
+            * stateElectorateBundle
+            * asgsRemoteness
+            * seifa
+            * parcelBundle
+            * propertyBundle
+          in: query
+          schema:
+            type: string
+            default: ' '
+        - name: excludeAliases
+          in: query
+          description: |
+            To exclude alias addresses from results.
+
+            **Acceptable values:**
+            * true
+            * false
+          schema:
+            type: string
+            default: 'false'
+        - name: longitude
+          in: query
+          description: 'The longitude of the point to search. Eg:150.8801'
+          required: true
+          schema:
+            type: string
+        - name: latitude
+          in: query
+          description: 'The latitude of the point to search. Eg: -33.9097'
+          required: true
+          schema:
+            type: string
+        - name: maxResults
+          in: query
+          description: Maximum number of search results to return.
+          schema:
+            type: string
+            default: "1"
+        - name: minGeoFeatureLevel
+          in: query
+          description: |
+            The accepted geoFeature type for the search.
+
+            **Acceptable values:**
+            * address
+            * approximate
+            * streetLocality
+            * locality
+          schema:
+            type: string
+            default: address
+        - name: dataset
+          in: query
+          description: |
+            A comma separated list of datasets to search.
+
+            **Acceptable values:**
+            * gnaf 
+            * continuousAddress
+          schema:
+            type: string
+            default: all
+      responses:
+        '200':
+          description: 'DUMMY TEXTS'
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Credentials:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                - address: '346 PACIFIC HWY, HIGHFIELDS NSW 2289'
+                  id: GANSW704957919
+                  rank: 0
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: 400 Error - Incorrect input parameter.
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: 404 Error - Record not found.
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: 429 Error - This service is experiencing sudden heavy traffic. Please retry your request soon.
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: 500 Error - An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:reverseGeocoder-jae/invocations'
+        passthroughBehavior: when_no_templates
+        type: aws
+        contentHandling: CONVERT_TO_TEXT
+    # options:
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Credentials:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''OPTIONS,GET,POST'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     requestTemplates:
+    #       application/json: '{ statusCode: 200 }'
+    #     passthroughBehavior: when_no_match
+    #     type: mock
+    #   x-stoplight:
+    #     id: wbdwtt35jgruj
+  /geocodeAddress:
+    get:
+      tags:
+        - ADDRESS
+      description: TEST AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: complexUnitIdentifier
+          in: query
+          schema:
+            type: string
+        - name: excludeAliases
+          in: query
+          schema:
+            type: string
+        - name: streetSuffix
+          in: query
+          schema:
+            type: string
+        - name: address
+          in: query
+          schema:
+            type: string
+        - name: stateFilter
+          in: query
+          schema:
+            type: string
+        - name: streetType
+          in: query
+          schema:
+            type: string
+        - name: maxResults
+          in: query
+          schema:
+            type: string
+        - name: minGeoFeatureLevel
+          in: query
+          schema:
+            type: string
+        - name: lotIdentifier
+          in: query
+          schema:
+            type: string
+        - name: localityName
+          in: query
+          schema:
+            type: string
+        - name: matchType
+          in: query
+          schema:
+            type: string
+        - name: siteName
+          in: query
+          schema:
+            type: string
+        - name: additionalProperties
+          in: query
+          schema:
+            type: string
+        - name: complexLevelNumber
+          in: query
+          schema:
+            type: string
+        - name: complexLevelType
+          in: query
+          schema:
+            type: string
+        - name: streetNumber2
+          in: query
+          schema:
+            type: string
+        - name: streetNumber1
+          in: query
+          schema:
+            type: string
+        - name: stateTerritory
+          in: query
+          schema:
+            type: string
+        - name: postcode
+          in: query
+          schema:
+            type: string
+        - name: complexUnitType
+          in: query
+          schema:
+            type: string
+        - name: dataset
+          in: query
+          schema:
+            type: string
+        - name: streetName
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:geocodeAddress-jae/invocations'
+        passthroughBehavior: when_no_templates
+        type: aws
+        contentHandling: CONVERT_TO_TEXT
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /getAddressDetails:
+    get:
+      tags:
+        - ADDRESS
+      description: TEST AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: addressId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: additionalProperties
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:getAddressDetails-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /administrativeBoundaries:
+    get:
+      tags:
+        - COORDINATE
+      description: TEST AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: excludeGeometry
+          in: query
+          schema:
+            type: string
+        - name: layers
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:administrativeBoundaries-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - COORDINATE
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /getSuggestedAddresses:
+    get:
+      tags:
+        - ADDRESS
+      description: TEST AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:getSuggestedAddresses-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /mailpoint:
+    get:
+      tags:
+        - ADDRESS
+      description: TEST AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: complexUnitIdentifier
+          in: query
+          schema:
+            type: string
+        - name: streetSuffix
+          in: query
+          schema:
+            type: string
+        - name: address
+          in: query
+          schema:
+            type: string
+        - name: streetType
+          in: query
+          schema:
+            type: string
+        - name: postalDeliveryTypeCode
+          in: query
+          schema:
+            type: string
+        - name: lotIdentifier
+          in: query
+          schema:
+            type: string
+        - name: localityName
+          in: query
+          schema:
+            type: string
+        - name: matchType
+          in: query
+          schema:
+            type: string
+        - name: siteName
+          in: query
+          schema:
+            type: string
+        - name: complexLevelNumber
+          in: query
+          schema:
+            type: string
+        - name: complexLevelType
+          in: query
+          schema:
+            type: string
+        - name: streetNumber2
+          in: query
+          schema:
+            type: string
+        - name: postalDeliveryIdentifier
+          in: query
+          schema:
+            type: string
+        - name: streetNumber1
+          in: query
+          schema:
+            type: string
+        - name: stateTerritory
+          in: query
+          schema:
+            type: string
+        - name: postcode
+          in: query
+          schema:
+            type: string
+        - name: complexUnitType
+          in: query
+          schema:
+            type: string
+        - name: streetName
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:mailpoint-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /property:
+    get:
+      tags:
+        - PROPERTY
+      description: TEST NOT AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: contributorId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: maxResults
+          in: query
+          schema:
+            type: string
+        - name: additionalProperties
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:mailpoint-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /cadastralParcelproperty:
+    get:
+      tags:
+        - CADASTRAL PARCEL
+      description: TEST NOT AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: parcelId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: maxResults
+          in: query
+          schema:
+            type: string
+        - name: additionalProperties
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:mailpoint-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /esriSuggest:
+    get:
+      tags:
+        - ADDRESS
+      description: TEST NOT AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: stateTerritory
+          in: query
+          schema:
+            type: string
+        - name: maxResults
+          in: query
+          schema:
+            type: string
+        - name: dataset
+          in: query
+          schema:
+            type: string
+        - name: excludeAliases
+          in: query
+          schema:
+            type: string
+        - name: callback
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:mailpoint-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  /findAddressCandidatesesriSuggest:
+    get:
+      tags:
+        - ADDRESS
+      description: TEST NOT AVAILABLE DUMMY TEXTS
+      parameters:
+        - name: magicKey
+          in: query
+          schema:
+            type: string
+        - name: outSR
+          in: query
+          schema:
+            type: string
+        - name: outFields
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DUMMY
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+        '400':
+          description: 400 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to parse queryStringParameters
+        '404':
+          description: 404 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. Unable to find adminBoundaries associated with coordinates
+        '429':
+          description: 429 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: Error. quota exceeded
+        '500':
+          description: 500 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: An internal error occured while retrieving address.
+        '504':
+          description: 504 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                errorMessage: '2019-08-11T22:25:52.333Z 56678e67-81e3-41ac-a0df-80fb35f43093 Task timed out after 15.03 seconds'
+      security:
+        - api_key: []
+      x-amazon-apigateway-request-validator: Validate query string parameters and headers
+      x-amazon-apigateway-integration:
+        httpMethod: GET
+        uri: 'arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:930692708828:function:mailpoint-jae/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+    # options:
+    #   tags:
+    #     - ADDRESS
+    #   responses:
+    #     '204':
+    #       description: 204 response
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Methods:
+    #           schema:
+    #             type: string
+    #         Access-Control-Allow-Headers:
+    #           schema:
+    #             type: string
+    #       content: {}
+    #   x-amazon-apigateway-integration:
+    #     responses:
+    #       default:
+    #         statusCode: '204'
+    #         responseParameters:
+    #           method.response.header.Access-Control-Allow-Credentials: '''true'''
+    #           method.response.header.Access-Control-Allow-Methods: '''GET,OPTIONS'''
+    #           method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+    #           method.response.header.Access-Control-Allow-Origin: '''*'''
+    #     passthroughBehaviour: when_no_match
+    #     requestTemplates:
+    #       application/json: '{"statusCode": 200}'
+    #     type: mock
+  # /:
+  #   options:
+  #     responses:
+  #       '204':
+  #         description: 204 response
+  #         headers:
+  #           Access-Control-Allow-Origin:
+  #             schema:
+  #               type: string
+  #           Access-Control-Allow-Methods:
+  #             schema:
+  #               type: string
+  #           Access-Control-Allow-Credentials:
+  #             schema:
+  #               type: string
+  #           Access-Control-Allow-Headers:
+  #             schema:
+  #               type: string
+  #         content: {}
+  #     x-amazon-apigateway-integration:
+  #       responses:
+  #         default:
+  #           statusCode: '204'
+  #           responseParameters:
+  #             method.response.header.Access-Control-Allow-Credentials: '''true'''
+  #             method.response.header.Access-Control-Allow-Methods: '''OPTIONS,GET,POST'''
+  #             method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+  #             method.response.header.Access-Control-Allow-Origin: '''*'''
+  #       requestTemplates:
+  #         application/json: '{ statusCode: 200 }'
+  #       passthroughBehavior: when_no_match
+  #       type: mock
+  #     x-stoplight:
+  #       id: dmox7cyjtdn4d
+  #   x-amazon-apigateway-any-method:
+  #     responses:
+  #       '200':
+  #         description: 200 response
+  #         content: {}
+  #     x-amazon-apigateway-integration:
+  #       responses:
+  #         default:
+  #           statusCode: '200'
+  #       requestTemplates:
+  #         application/json: '{ "statusCode": 200 }'
+  #       passthroughBehavior: never
+  #       type: mock
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
